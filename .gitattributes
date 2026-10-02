@@ -1,0 +1,75 @@
+# ------------------------------------------------------------------------------
+# 1. Global Baseline / Auto-Detection
+# ------------------------------------------------------------------------------
+# Handle line endings automatically for text files. Force LF on check-in.
+* text=auto
+
+# ------------------------------------------------------------------------------
+# 2. Common Code & Script Files (Enforce Unix LF)
+# ------------------------------------------------------------------------------
+*.sh text eol=lf
+*.bash text eol=lf
+*.zsh text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.py text eol=lf
+*.go text eol=lf
+*.rb text eol=lf
+*.php text eol=lf
+*.json text
+*.yaml text
+*.yml text
+*.toml text
+
+# ------------------------------------------------------------------------------
+# 3. Windows-Specific Scripts (Enforce Windows CRLF)
+# ------------------------------------------------------------------------------
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# ------------------------------------------------------------------------------
+# 4. Documentation & Web Assets
+# ------------------------------------------------------------------------------
+*.txt text
+*.md text
+*.html text
+*.css text
+*.scss text
+*.svg text
+
+# ------------------------------------------------------------------------------
+# 5. Pure Binary Assets (Block End-Of-Line Conversions)
+# ------------------------------------------------------------------------------
+# Images
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+
+# Audio/Video
+*.mp3 binary
+*.mp4 binary
+*.mov binary
+
+# Fonts & Archives
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.zip binary
+*.tar.gz binary
+
+# Documentation & Data
+*.pdf binary
+
+# ------------------------------------------------------------------------------
+# 6. Archive / Export Ignore Rules
+# ------------------------------------------------------------------------------
+# Do not bundle Git metadata or internal configuration files into 'git archive' zips
+.gitattributes export-ignore
+.gitignore export-ignore
+.github/ export-ignore
