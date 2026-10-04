@@ -9,11 +9,24 @@ echo "Setting up the development environment... (setup.sh)"
 # Mark the workspace as trusted so Git permits operations in the container.
 git config --global --add safe.directory '*'
 
-# Prepare the environment file for use in the dev container.
-ENV_FILE="env"
+# Prepare the environment file for the dev container.
+# SCRIPT_DIR: directory of this setup script.
+# REPO_ROOT: repository root one level above .devcontainer.
+# ENV_FILE: source environment file used to populate the workspace .env.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+ENV_FILE="${REPO_ROOT}/env"
 
 # Copy the project's root environment file to .env.
-cp env .env
+if [[ ! -f "${ENV_FILE}" ]]; then
+    echo "ERROR: Missing environment file at ${ENV_FILE}" >&2
+    exit 1
+fi
+cp "${ENV_FILE}" "${REPO_ROOT}/.env"
+
+# (VS Code Dev Container) Update the database hostname in .env
+# Change `localhost` to `127.0.0.1` because VS Code Dev Container may not resolve `localhost` correctly.
+sed -i 's/database\.default\.hostname = localhost/database\.default\.hostname = 127.0.0.1/' "${REPO_ROOT}/.env"
 
 # Install the PHP dependencies defined in composer.json.
 # Running Composer from the workspace root ensures the project's dependencies
@@ -43,12 +56,6 @@ fi
 
 # Provision the project database when a name is configured.
 mysql -u root -e "CREATE DATABASE IF NOT EXISTS smartmuadzzin;" || sudo mysql -e "CREATE DATABASE IF NOT EXISTS smartmuadzzin;"
-
-# Run migrations and seed the database when needed. (optional)
-# If migrations fail, change database.default.hostname from localhost to 127.0.0.1
-# in .env and run the migration again.
-#php spark migrate || echo "Failed to run migrations. Please check the database connection settings in .env and ensure the database is accessible."
-#php spark db:seed InitialSeeder || echo "Failed to run initial seeding. Please check the database connection settings in .env and ensure the database is accessible."
 
 # Configure git with your name and email for commits. If not yet configured, uncomment the following line and replace with your details.
 #git config --global user.name 'Your Name' && git config --global user.email 'your_email@example.com'
