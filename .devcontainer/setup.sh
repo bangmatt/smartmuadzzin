@@ -26,7 +26,11 @@ cp "${ENV_FILE}" "${REPO_ROOT}/.env"
 
 # (VS Code Dev Container) Update the database hostname in .env
 # Change `localhost` to `127.0.0.1` because VS Code Dev Container may not resolve `localhost` correctly.
-sed -i 's/database\.default\.hostname = localhost/database\.default\.hostname = 127.0.0.1/' "${REPO_ROOT}/.env"
+sed -i -E \
+  -e 's/database\.default\.hostname[[:space:]]*=[[:space:]]*localhost/database.default.hostname = 127.0.0.1/' \
+  -e 's/admin\.username[[:space:]]*=[[:space:]]*$/admin.username = admin/' \
+  -e 's/admin\.passwordHash[[:space:]]*=[[:space:]]*$/admin.password = admin/' \
+  "${REPO_ROOT}/.env"
 
 # Install the PHP dependencies defined in composer.json.
 # Running Composer from the workspace root ensures the project's dependencies
